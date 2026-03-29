@@ -40,11 +40,16 @@ textures.forEach((t) => {
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 
+const CUBE_SCALE_BASE = 1.55;
+const POSITION_SPREAD = 34;
+const POSITION_Y_OFFSET = 32;
+const POSITION_Z_OFFSET = 16;
+
 const makeCubes = () =>
   techItems.map((_t, techIndex) => ({
     // exactly one cube per tech item
     techIndex,
-    scale: [0.95, 1, 1.05][techIndex % 3],
+    scale: CUBE_SCALE_BASE * [0.95, 1, 1.05][techIndex % 3],
     calloutSide: (["x", "-x", "z", "-z"] as const)[techIndex % 4],
   }));
 
@@ -106,7 +111,11 @@ function CubeGeo({
       linearDamping={0.75}
       angularDamping={0.15}
       friction={0.2}
-      position={[r(20), r(20) - 25, r(20) - 10]}
+      position={[
+        r(POSITION_SPREAD),
+        r(POSITION_SPREAD) - POSITION_Y_OFFSET,
+        r(POSITION_SPREAD) - POSITION_Z_OFFSET,
+      ]}
       ref={api}
       colliders={false}
     >
