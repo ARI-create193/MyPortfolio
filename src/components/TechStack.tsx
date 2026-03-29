@@ -3,14 +3,13 @@ import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
-import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  BallCollider,
   Physics,
   RigidBody,
-  CylinderCollider,
   RapierRigidBody,
+  BallCollider,
+  CuboidCollider,
 } from "@react-three/rapier";
 
 const textureLoader = new THREE.TextureLoader();
@@ -33,27 +32,32 @@ const imageUrls = [
 ];
 const textures = imageUrls.map((url) => textureLoader.load(url));
 
-const sphereGeometry = new THREE.SphereGeometry(1, 28, 28);
+textures.forEach((t) => {
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+});
 
-const spheres = [...Array(30)].map(() => ({
-  scale: [0.7, 1, 0.8, 1, 1][Math.floor(Math.random() * 5)],
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+
+const cubes = [...Array(30)].map(() => ({
+  scale: [0.85, 1, 1.15][Math.floor(Math.random() * 3)],
 }));
 
-type SphereProps = {
+type CubeProps = {
   vec?: THREE.Vector3;
   scale: number;
   r?: typeof THREE.MathUtils.randFloatSpread;
-  material: THREE.MeshPhysicalMaterial;
+  material: THREE.Material | THREE.Material[];
   isActive: boolean;
 };
 
-function SphereGeo({
+function CubeGeo({
   vec = new THREE.Vector3(),
   scale,
   r = THREE.MathUtils.randFloatSpread,
   material,
   isActive,
-}: SphereProps) {
+}: CubeProps) {
   const api = useRef<RapierRigidBody | null>(null);
 
   useFrame((_state, delta) => {
@@ -82,19 +86,14 @@ function SphereGeo({
       ref={api}
       colliders={false}
     >
-      <BallCollider args={[scale]} />
-      <CylinderCollider
-        rotation={[Math.PI / 2, 0, 0]}
-        position={[0, 0, 1.2 * scale]}
-        args={[0.15 * scale, 0.275 * scale]}
-      />
+      <CuboidCollider args={[0.5 * scale, 0.5 * scale, 0.5 * scale]} />
       <mesh
         castShadow
         receiveShadow
         scale={scale}
-        geometry={sphereGeometry}
+        geometry={cubeGeometry}
         material={material}
-        rotation={[0.3, 1, 1]}
+        rotation={[0.35, 0.75, 0.25]}
       />
     </RigidBody>
   );
@@ -167,18 +166,18 @@ const TechStack = () => {
     };
   }, []);
   const materials = useMemo(() => {
-    return textures.map(
-      (texture) =>
-        new THREE.MeshPhysicalMaterial({
-          map: texture,
-          emissive: "#ffffff",
-          emissiveMap: texture,
-          emissiveIntensity: 0.3,
-          metalness: 0.5,
-          roughness: 1,
-          clearcoat: 0.1,
-        })
-    );
+    return textures.map((texture) => {
+      const m = new THREE.MeshStandardMaterial({
+        map: texture,
+        emissive: new THREE.Color("#ffffff"),
+        emissiveMap: texture,
+        emissiveIntensity: 0.35,
+        metalness: 0.15,
+        roughness: 0.85,
+      });
+      // Same logo on all faces for readability.
+      return [m, m, m, m, m, m];
+    });
   }, []);
 
   return (
@@ -204,8 +203,8 @@ const TechStack = () => {
         <directionalLight position={[0, 5, -4]} intensity={2} />
         <Physics gravity={[0, 0, 0]}>
           <Pointer isActive={isActive} />
-          {spheres.map((props, i) => (
-            <SphereGeo
+          {cubes.map((props, i) => (
+            <CubeGeo
               key={i}
               {...props}
               material={materials[Math.floor(Math.random() * materials.length)]}
