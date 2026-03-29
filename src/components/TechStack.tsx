@@ -41,12 +41,11 @@ textures.forEach((t) => {
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 const makeCubes = () =>
-  [...Array(30)].map(() => ({
-    scale: [0.85, 1, 1.15][Math.floor(Math.random() * 3)],
-    techIndex: Math.floor(Math.random() * techItems.length),
-    calloutSide: (["x", "-x", "z", "-z"] as const)[
-      Math.floor(Math.random() * 4)
-    ],
+  techItems.map((_t, techIndex) => ({
+    // exactly one cube per tech item
+    techIndex,
+    scale: [0.95, 1, 1.05][techIndex % 3],
+    calloutSide: (["x", "-x", "z", "-z"] as const)[techIndex % 4],
   }));
 
 type CubeProps = {
