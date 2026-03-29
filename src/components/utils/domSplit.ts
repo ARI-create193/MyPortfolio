@@ -17,7 +17,8 @@ function wrapText(
   const spans: HTMLElement[] = [];
 
   parts.forEach((part) => {
-    if (mode === "words" && /^\s+$/.test(part)) {
+    // Preserve whitespace without wrapping so spacing stays correct.
+    if (/^\s+$/.test(part)) {
       frag.appendChild(document.createTextNode(part));
       return;
     }
@@ -44,7 +45,8 @@ function splitElement(el: Element, mode: SplitMode, wrapperClass: string) {
   const textNodes: Text[] = [];
   while (walker.nextNode()) {
     const n = walker.currentNode as Text;
-    if ((n.nodeValue ?? "").trim().length === 0) continue;
+    // For chars splitting we must keep whitespace text nodes too.
+    if (mode !== "chars" && (n.nodeValue ?? "").trim().length === 0) continue;
     textNodes.push(n);
   }
 

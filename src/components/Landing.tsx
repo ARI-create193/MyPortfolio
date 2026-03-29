@@ -15,14 +15,19 @@ const Landing = ({ children }: PropsWithChildren) => {
             </h1>
           </div>
           <div className="landing-info">
-            <h3>A Data Science</h3>
-            <h2 className="landing-info-h2">
-              <div className="landing-h2-1">ML Enthusiast</div>
-              <div className="landing-h2-2">Analyst</div>
-            </h2>
-            <h2>
-              <div className="landing-h2-info">Analyst</div>
-              <div className="landing-h2-info-1">ML Enthusiast</div>
+            <h3>A Data Scientist</h3>
+            <h2 className="landing-rotator" aria-label="Data Scientist, ML Enthusiast, Analyst">
+              <span className="rotator-window" aria-hidden="true">
+                <span className="rotator-track">
+                  <span className="rotator-item">Data Scientist</span>
+                  <span className="rotator-item">ML Enthusiast</span>
+                  <span className="rotator-item">Analyst</span>
+                  {/* duplicate first item for seamless loop */}
+                  <span className="rotator-item" aria-hidden="true">
+                    Data Scientist
+                  </span>
+                </span>
+              </span>
             </h2>
           </div>
         </div>

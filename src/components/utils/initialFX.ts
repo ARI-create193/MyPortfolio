@@ -13,7 +13,6 @@ export function initialFX() {
   });
 
   const landingText = splitChars([
-    ...Array.from(document.querySelectorAll(".landing-info h3")),
     ...Array.from(document.querySelectorAll(".landing-intro h2")),
     ...Array.from(document.querySelectorAll(".landing-intro h1")),
   ]);
@@ -31,23 +30,21 @@ export function initialFX() {
     }
   );
 
-  const landingText2 = splitChars(".landing-h2-info", "split-char");
   gsap.fromTo(
-    landingText2.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
+    ".landing-info h3",
+    { opacity: 0, y: 30, filter: "blur(5px)" },
     {
       opacity: 1,
-      duration: 1.2,
+      duration: 1,
       filter: "blur(0px)",
-      ease: "power3.inOut",
+      ease: "power2.out",
       y: 0,
-      stagger: 0.025,
-      delay: 0.3,
+      delay: 0.55,
     }
   );
 
   gsap.fromTo(
-    ".landing-info-h2",
+    ".landing-rotator",
     { opacity: 0, y: 30 },
     {
       opacity: 1,
@@ -68,71 +65,20 @@ export function initialFX() {
     }
   );
 
-  const landingText3 = splitChars(".landing-h2-info-1", "split-char");
-  const landingText4 = splitChars(".landing-h2-1", "split-char");
-  const landingText5 = splitChars(".landing-h2-2", "split-char");
+  const track = document.querySelector(".rotator-track") as HTMLElement | null;
+  const items = track?.querySelectorAll(".rotator-item") ?? [];
+  if (track && items.length > 1) {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0 });
+    const hold = 2.2;
 
-  // Ensure the "secondary" words start hidden to avoid overlap
-  gsap.set([landingText3.chars, landingText5.chars], { opacity: 0, y: 80 });
+    // Start at the first item
+    tl.set(track, { yPercent: 0 });
 
-  LoopText(landingText2, landingText3);
-  LoopText(landingText4, landingText5);
-}
-
-function LoopText(
-  Text1: { chars: HTMLElement[] },
-  Text2: { chars: HTMLElement[] }
-) {
-  var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-  const delay = 4;
-  const delay2 = delay * 2 + 1;
-
-  tl.fromTo(
-    Text2.chars,
-    { opacity: 0, y: 80 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.1,
-      delay: delay,
-    },
-    0
-  )
-    .fromTo(
-      Text1.chars,
-      { y: 80 },
-      {
-        duration: 1.2,
-        ease: "power3.inOut",
-        y: 0,
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    )
-    .fromTo(
-      Text1.chars,
-      { y: 0 },
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay,
-      },
-      0
-    )
-    .to(
-      Text2.chars,
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1
-    );
+    // Animate down the list (including the duplicate last item), then snap back to 0
+    for (let i = 1; i < items.length; i++) {
+      tl.to(track, { yPercent: -100 * i, duration: 0.9, ease: "power3.inOut" });
+      tl.to({}, { duration: hold });
+    }
+    tl.set(track, { yPercent: 0 });
+  }
 }
