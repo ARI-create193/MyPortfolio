@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+import { Environment, Html, Line } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -13,24 +13,25 @@ import {
 } from "@react-three/rapier";
 
 const textureLoader = new THREE.TextureLoader();
-const imageUrls = [
-  "/images/python.png",
-  "/images/cpp.png",
-  "/images/java.png",
-  "/images/mysql.png",
-  "/images/numpy.png",
-  "/images/pandas.png",
-  "/images/matplotlib.png",
-  "/images/gradio.png",
-  "/images/ml.png",
-  "/images/powerbi.png",
-  "/images/tableau.png",
-  "/images/snowflake.png",
-  "/images/framer.png",
-  "/images/figma.png",
-  "/images/claude.png",
-];
-const textures = imageUrls.map((url) => textureLoader.load(url));
+const techItems = [
+  { name: "Python", url: "/images/python.png" },
+  { name: "C++", url: "/images/cpp.png" },
+  { name: "Java", url: "/images/java.png" },
+  { name: "MySQL", url: "/images/mysql.png" },
+  { name: "NumPy", url: "/images/numpy.png" },
+  { name: "Pandas", url: "/images/pandas.png" },
+  { name: "Matplotlib", url: "/images/matplotlib.png" },
+  { name: "Gradio", url: "/images/gradio.png" },
+  { name: "Machine Learning", url: "/images/ml.png" },
+  { name: "Power BI", url: "/images/powerbi.png" },
+  { name: "Tableau", url: "/images/tableau.png" },
+  { name: "Snowflake", url: "/images/snowflake.png" },
+  { name: "Framer", url: "/images/framer.png" },
+  { name: "Figma", url: "/images/figma.png" },
+  { name: "Claude", url: "/images/claude.png" },
+] as const;
+
+const textures = techItems.map((t) => textureLoader.load(t.url));
 
 textures.forEach((t) => {
   t.colorSpace = THREE.SRGBColorSpace;
@@ -39,9 +40,14 @@ textures.forEach((t) => {
 
 const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 
-const cubes = [...Array(30)].map(() => ({
-  scale: [0.85, 1, 1.15][Math.floor(Math.random() * 3)],
-}));
+const makeCubes = () =>
+  [...Array(30)].map(() => ({
+    scale: [0.85, 1, 1.15][Math.floor(Math.random() * 3)],
+    techIndex: Math.floor(Math.random() * techItems.length),
+    calloutSide: (["x", "-x", "z", "-z"] as const)[
+      Math.floor(Math.random() * 4)
+    ],
+  }));
 
 type CubeProps = {
   vec?: THREE.Vector3;
@@ -49,6 +55,8 @@ type CubeProps = {
   r?: typeof THREE.MathUtils.randFloatSpread;
   material: THREE.Material | THREE.Material[];
   isActive: boolean;
+  label: string;
+  calloutSide: "x" | "-x" | "z" | "-z";
 };
 
 function CubeGeo({
@@ -57,6 +65,8 @@ function CubeGeo({
   r = THREE.MathUtils.randFloatSpread,
   material,
   isActive,
+  label,
+  calloutSide,
 }: CubeProps) {
   const api = useRef<RapierRigidBody | null>(null);
 
@@ -77,6 +87,21 @@ function CubeGeo({
     api.current?.applyImpulse(impulse, true);
   });
 
+  const calloutOffset = useMemo(() => {
+    const base = 1.35 * scale;
+    const up = 1.0 * scale;
+    switch (calloutSide) {
+      case "x":
+        return new THREE.Vector3(base, up, 0);
+      case "-x":
+        return new THREE.Vector3(-base, up, 0);
+      case "z":
+        return new THREE.Vector3(0, up, base);
+      case "-z":
+        return new THREE.Vector3(0, up, -base);
+    }
+  }, [calloutSide, scale]);
+
   return (
     <RigidBody
       linearDamping={0.75}
@@ -95,6 +120,42 @@ function CubeGeo({
         material={material}
         rotation={[0.35, 0.75, 0.25]}
       />
+
+      {/* Callout line + always-readable label */}
+      <Line
+        points={[
+          [0, 0, 0],
+          [calloutOffset.x, calloutOffset.y, calloutOffset.z],
+        ]}
+        color="#c2a4ff"
+        lineWidth={1}
+        transparent
+        opacity={0.65}
+      />
+      <Html
+        position={[calloutOffset.x, calloutOffset.y, calloutOffset.z]}
+        sprite
+        transform={false}
+        center
+        distanceFactor={10}
+        style={{
+          pointerEvents: "none",
+          fontFamily: "Geist, sans-serif",
+          fontSize: "12px",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: "#eae5ec",
+          background: "rgba(11, 8, 12, 0.6)",
+          border: "1px solid rgba(194, 164, 255, 0.45)",
+          padding: "6px 10px",
+          borderRadius: "999px",
+          backdropFilter: "blur(6px)",
+          WebkitBackdropFilter: "blur(6px)",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {label}
+      </Html>
     </RigidBody>
   );
 }
@@ -180,6 +241,8 @@ const TechStack = () => {
     });
   }, []);
 
+  const cubes = useMemo(() => makeCubes(), []);
+
   return (
     <div className="techstack">
       <h2> My Techstack</h2>
@@ -207,8 +270,9 @@ const TechStack = () => {
             <CubeGeo
               key={i}
               {...props}
-              material={materials[Math.floor(Math.random() * materials.length)]}
+              material={materials[props.techIndex]}
               isActive={isActive}
+              label={techItems[props.techIndex].name}
             />
           ))}
         </Physics>
