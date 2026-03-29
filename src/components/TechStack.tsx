@@ -3,6 +3,8 @@ import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { EffectComposer, N8AO } from "@react-three/postprocessing";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   BallCollider,
   Physics,
@@ -13,14 +15,21 @@ import {
 
 const textureLoader = new THREE.TextureLoader();
 const imageUrls = [
-  "/images/react2.webp",
-  "/images/next2.webp",
-  "/images/node2.webp",
-  "/images/express.webp",
-  "/images/mongo.webp",
-  "/images/mysql.webp",
-  "/images/typescript.webp",
-  "/images/javascript.webp",
+  "/images/python.png",
+  "/images/cpp.png",
+  "/images/java.png",
+  "/images/mysql.png",
+  "/images/numpy.png",
+  "/images/pandas.png",
+  "/images/matplotlib.png",
+  "/images/gradio.png",
+  "/images/ml.png",
+  "/images/powerbi.png",
+  "/images/tableau.png",
+  "/images/snowflake.png",
+  "/images/framer.png",
+  "/images/figma.png",
+  "/images/claude.png",
 ];
 const textures = imageUrls.map((url) => textureLoader.load(url));
 
@@ -147,6 +156,12 @@ const TechStack = () => {
       });
     });
     window.addEventListener("scroll", handleScroll);
+    
+    // Refresh ScrollTrigger because Suspense lazy loading affects DOM heights
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

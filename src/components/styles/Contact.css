@@ -71,7 +71,58 @@ a.contact-social {
     margin-top: 0px;
   }
 }
+.contact-form-section {
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+.contact-form-horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+.contact-form-horizontal input {
+  flex: 1;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  border-radius: 4px;
+  outline: none;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+.contact-form-horizontal input:focus {
+  border-color: var(--accentColor);
+  background: rgba(255, 255, 255, 0.1);
+}
+.contact-form-horizontal .submit-btn {
+  background: var(--accentColor);
+  color: #000;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+.contact-form-horizontal .submit-btn:hover {
+  background: #fff;
+}
 @media only screen and (max-width: 900px) {
+  .contact-form-horizontal {
+    flex-direction: column;
+  }
+  .contact-form-horizontal input, 
+  .contact-form-horizontal .submit-btn {
+    width: 100%;
+  }
   .contact-flex {
     flex-direction: column;
     gap: 40px;

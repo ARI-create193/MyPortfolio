@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 export let smoother: ScrollSmoother;
 
 const Navbar = () => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
@@ -42,15 +42,30 @@ const Navbar = () => {
   return (
     <>
       <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
-          Logo
+        <a href="/#" className="navbar-title" data-cursor="disable" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <div style={{ 
+            background: 'var(--accentColor)', 
+            color: '#000', 
+            minWidth: '35px',
+            height: '35px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%', 
+            fontWeight: 800,
+            fontSize: '18px',
+            letterSpacing: '-1px'
+          }}>AK</div>
+          <div style={{ fontWeight: 600, fontSize: '22px', letterSpacing: '1px', color: '#fff' }}>
+            aryan<span style={{ color: 'var(--accentColor)' }}>.</span>
+          </div>
         </a>
         <a
-          href="mailto:example@mail.com"
+          href="mailto:aryankaminwar@gmail.com"
           className="navbar-connect"
           data-cursor="disable"
         >
-          example@mail.com
+          aryankaminwar@gmail.com
         </a>
         <ul>
           <li>

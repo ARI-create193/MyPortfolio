@@ -58,92 +58,91 @@ const WhatIDo = () => {
               />
             </svg>
           </div>
+
           <div
             className="what-content what-noTouch"
             ref={(el) => setRef(el, 0)}
           >
             <div className="what-border1">
               <svg height="100%">
-                <line
-                  x1="0"
-                  y1="0"
-                  x2="100%"
-                  y2="0"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
-                <line
-                  x1="0"
-                  y1="100%"
-                  x2="100%"
-                  y2="100%"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
+                <line x1="0" y1="0" x2="100%" y2="0" stroke="white" strokeWidth="2" strokeDasharray="6,6" />
+                <line x1="0" y1="100%" x2="100%" y2="100%" stroke="white" strokeWidth="2" strokeDasharray="6,6" />
               </svg>
             </div>
             <div className="what-corner"></div>
 
             <div className="what-content-in">
-              <h3>DEVELOP</h3>
-              <h4>Description</h4>
+              <h3>ANALYZE</h3>
+              <h4>From Data to Insights</h4>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas
-                quia aliquid laboriosam ducimus sit molestiae.
+                Transforming raw datasets — grocery sales, Netflix content, Play Store apps, and customer feedback — into meaningful patterns using Python and data analysis techniques.
               </p>
               <h5>Skillset & tools</h5>
               <div className="what-content-flex">
-                <div className="what-tags">JavaScript</div>
-                <div className="what-tags">TypeScript</div>
-                <div className="what-tags">Three.js</div>
-                <div className="what-tags">React</div>
-                <div className="what-tags">Css</div>
-                <div className="what-tags">Node.js</div>
-                <div className="what-tags">Next.js</div>
-                <div className="what-tags">Express.js</div>
-                <div className="what-tags">PHP</div>
-                <div className="what-tags">MySql</div>
+                <div className="what-tags">Python</div>
+                <div className="what-tags">Pandas</div>
+                <div className="what-tags">NumPy</div>
+                <div className="what-tags">SQL</div>
+                <div className="what-tags">Data Cleaning</div>
+                <div className="what-tags">EDA</div>
               </div>
               <div className="what-arrow"></div>
             </div>
           </div>
+
           <div
             className="what-content what-noTouch"
             ref={(el) => setRef(el, 1)}
           >
             <div className="what-border1">
               <svg height="100%">
-                <line
-                  x1="0"
-                  y1="100%"
-                  x2="100%"
-                  y2="100%"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeDasharray="6,6"
-                />
+                <line x1="0" y1="100%" x2="100%" y2="100%" stroke="white" strokeWidth="2" strokeDasharray="6,6" />
               </svg>
             </div>
             <div className="what-corner"></div>
             <div className="what-content-in">
-              <h3>DESIGN</h3>
-              <h4>Description</h4>
+              <h3>PREDICT</h3>
+              <h4>From Insights to Intelligence</h4>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas
-                quia aliquid laboriosam ducimus sit molestiae
+                Building machine learning models that forecast future sales, predict app ratings, and classify customer satisfaction with high accuracy.
               </p>
               <h5>Skillset & tools</h5>
               <div className="what-content-flex">
-                <div className="what-tags">Blender</div>
-                <div className="what-tags">Zbrush</div>
+                <div className="what-tags">Machine Learning</div>
+                <div className="what-tags">Scikit-learn</div>
+                <div className="what-tags">NLP</div>
+                <div className="what-tags">Predictive Modeling</div>
+                <div className="what-tags">Classification</div>
+                <div className="what-tags">Regression</div>
+              </div>
+              <div className="what-arrow"></div>
+            </div>
+          </div>
+
+          <div
+            className="what-content what-noTouch"
+            ref={(el) => setRef(el, 2)}
+          >
+            <div className="what-border1">
+              <svg height="100%">
+                <line x1="0" y1="100%" x2="100%" y2="100%" stroke="white" strokeWidth="2" strokeDasharray="6,6" />
+              </svg>
+            </div>
+            <div className="what-corner"></div>
+            <div className="what-content-in">
+              <h3>VISUALIZE</h3>
+              <h4>From Intelligence to Impact</h4>
+              <p>
+                Designing interactive Gradio dashboards that make complex ML predictions simple, visual, and accessible in real time.
+              </p>
+              <h5>Skillset & tools</h5>
+              <div className="what-content-flex">
+                <div className="what-tags">Gradio</div>
+                <div className="what-tags">Power BI</div>
+                <div className="what-tags">Tableau</div>
+                <div className="what-tags">Matplotlib</div>
+                <div className="what-tags">Data Visualization</div>
                 <div className="what-tags">UI Design</div>
-                <div className="what-tags">Motion</div>
-                <div className="what-tags">Rigging</div>
-                <div className="what-tags">3D Animation</div>
-                <div className="what-tags">Character Design</div>
-                <div className="what-tags">Modelling</div>
               </div>
               <div className="what-arrow"></div>
             </div>
