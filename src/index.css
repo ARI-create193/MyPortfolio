@@ -84,6 +84,11 @@ body {
 .split-line {
   overflow: hidden;
 }
+.split-char,
+.split-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
 .split-h2 {
   overflow: hidden;
   display: flex;
