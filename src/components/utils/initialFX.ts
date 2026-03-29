@@ -72,6 +72,9 @@ export function initialFX() {
   const landingText4 = splitChars(".landing-h2-1", "split-char");
   const landingText5 = splitChars(".landing-h2-2", "split-char");
 
+  // Ensure the "secondary" words start hidden to avoid overlap
+  gsap.set([landingText3.chars, landingText5.chars], { opacity: 0, y: 80 });
+
   LoopText(landingText2, landingText3);
   LoopText(landingText4, landingText5);
 }
