@@ -12,8 +12,8 @@ const Contact = () => {
     const target = event.target as HTMLFormElement;
     const formData = new FormData(target);
     
-    // IMPORTANT: User needs to replace YOUR_ACCESS_KEY_HERE
-    formData.append("access_key", "YOUR_ACCESS_KEY_HERE");
+    // Web3Forms Access Key
+    formData.append("access_key", "08e40988-1846-49eb-a15d-58edae163323");
 
     const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
