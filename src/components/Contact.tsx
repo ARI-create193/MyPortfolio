@@ -16,13 +16,6 @@ const Contact = () => {
     const message = formData.get("message") as string;
 
     try {
-      const from =
-        (import.meta.env.VITE_RESEND_FROM as string | undefined) ??
-        "Acme <onboarding@resend.dev>";
-      const toEmail =
-        (import.meta.env.VITE_RESEND_TO as string | undefined) ??
-        "aryankaminwar@gmail.com";
-
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -30,8 +23,8 @@ const Contact = () => {
           "Authorization": `Bearer ${import.meta.env.VITE_RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from,
-          to: [toEmail], // If you’re not using Resend onboarding, set VITE_RESEND_FROM to a verified email.
+          from: "Acme <onboarding@resend.dev>",
+          to: ["aryankaminwar@gmail.com"], // Replace with your verified domain email if not using onboarding
           subject: `New Portfolio Message from ${name}`,
           html: `
             <h3>New Contact Form Submission</h3>
