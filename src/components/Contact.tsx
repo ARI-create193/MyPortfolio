@@ -11,22 +11,49 @@ const Contact = () => {
     
     const target = event.target as HTMLFormElement;
     const formData = new FormData(target);
-    
-    // Web3Forms Access Key
-    formData.append("access_key", "08e40988-1846-49eb-a15d-58edae163323");
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
 
-    const res = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData
-    }).then((res) => res.json());
+    try {
+      const from =
+        (import.meta.env.VITE_RESEND_FROM as string | undefined) ??
+        "Acme <onboarding@resend.dev>";
+      const toEmail =
+        (import.meta.env.VITE_RESEND_TO as string | undefined) ??
+        "aryankaminwar@gmail.com";
 
-    if (res.success) {
-      setResult("Message Sent Successfully!");
-      target.reset();
-      // Optional: Reset button text back after a few seconds
-      setTimeout(() => setResult("Send Message"), 5000);
-    } else {
-      setResult(res.message || "Failed to send");
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from,
+          to: [toEmail], // If you’re not using Resend onboarding, set VITE_RESEND_FROM to a verified email.
+          subject: `New Portfolio Message from ${name}`,
+          html: `
+            <h3>New Contact Form Submission</h3>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+          `,
+        })
+      });
+
+      if (res.ok) {
+        setResult("Message Sent Successfully!");
+        target.reset();
+        setTimeout(() => setResult("Send Message"), 5000);
+      } else {
+        const errorData = await res.json();
+        setResult(errorData.message || "Failed to send");
+      }
+    } catch (error) {
+      console.error("Email send error:", error);
+      setResult("Failed to send");
     }
   };
 
