@@ -11,42 +11,31 @@ const Contact = () => {
     
     const target = event.target as HTMLFormElement;
     const formData = new FormData(target);
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const message = formData.get("message") as string;
+    
+    // Add Web3Forms access key
+    formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
 
     try {
-      const res = await fetch("https://api.resend.com/emails", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_RESEND_API_KEY}`,
-        },
-        body: JSON.stringify({
-          from: "Acme <onboarding@resend.dev>",
-          to: ["aryankaminwar@gmail.com"], // Replace with your verified domain email if not using onboarding
-          subject: `New Portfolio Message from ${name}`,
-          html: `
-            <h3>New Contact Form Submission</h3>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Message:</strong></p>
-            <p>${message}</p>
-          `,
-        })
+        body: formData
       });
 
-      if (res.ok) {
+      const data = await res.json();
+
+      if (data.success) {
         setResult("Message Sent Successfully!");
         target.reset();
         setTimeout(() => setResult("Send Message"), 5000);
       } else {
-        const errorData = await res.json();
-        setResult(errorData.message || "Failed to send");
+        console.error("Error", data);
+        setResult(data.message || "Failed to send");
+        setTimeout(() => setResult("Send Message"), 5000);
       }
     } catch (error) {
       console.error("Email send error:", error);
       setResult("Failed to send");
+      setTimeout(() => setResult("Send Message"), 5000);
     }
   };
 
