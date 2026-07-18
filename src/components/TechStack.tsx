@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
 import { FaJava } from "react-icons/fa";
-import { SiGradio, SiMysql, SiNumpy, SiPython, SiScikitlearn, SiSnowflake } from "react-icons/si";
+import { SiGradio, SiMysql, SiNumpy, SiSnowflake } from "react-icons/si";
 
 
 type Tech = {
@@ -15,14 +15,14 @@ type Tech = {
 };
 
 const techItems: Tech[] = [
-  { name: "Python", icon: SiPython, color: "#3776ab", category: "Core", detail: "Analysis & automation" },
+  { name: "Python", image: "/images/python.png", category: "Core", detail: "Analysis & automation" },
   { name: "Java", icon: FaJava, color: "#e76f00", category: "Core", detail: "Core programming" },
   { name: "SQL", icon: SiMysql, color: "#4479a1", category: "Core", detail: "Databases & queries" },
   { name: "NumPy", icon: SiNumpy, color: "#4dabcf", category: "Analyze", detail: "Numerical computing" },
   { name: "Pandas", image: "/images/pandas.png", category: "Analyze", detail: "Data wrangling" },
   { name: "Matplotlib", iconType: "matplotlib", category: "Analyze", detail: "Data storytelling" },
   { name: "DAX Query", iconType: "dax", category: "Analyze", detail: "Power BI calculations" },
-  { name: "Scikit-learn", icon: SiScikitlearn, color: "#f7931e", category: "Build", detail: "Predictive models" },
+  { name: "Scikit-learn", image: "/images/scikit-learn.svg", category: "Build", detail: "Predictive models" },
   { name: "Gradio", icon: SiGradio, color: "#f97316", category: "Build", detail: "Interactive ML apps" },
   { name: "Power BI", iconType: "powerbi", category: "Visualize", detail: "Business intelligence" },
   { name: "Tableau", image: "/images/tableau.png", category: "Visualize", detail: "Visual analytics" },
