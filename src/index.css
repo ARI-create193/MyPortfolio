@@ -99,22 +99,29 @@ body {
 .techstack {
   width: 100%;
   position: relative;
-  height: var(--vh);
+  min-height: 780px;
   margin: auto;
-  margin-top: 50px;
-  margin-bottom: -100px;
+  padding: 90px 0;
+  overflow: hidden;
+  background: radial-gradient(circle at 75% 50%, rgba(194, 164, 255, 0.12), transparent 33%), #0b080c;
 }
-
+.tech-lab-layout { width: var(--cWidth); max-width: var(--cMaxWidth); min-height: 600px; margin: auto; display: grid; grid-template-columns: minmax(220px, .65fr) minmax(620px, 1.6fr); align-items: center; gap: clamp(32px, 6vw, 110px); }
+.techstack-copy p { margin: 0 0 12px; color: var(--accentColor); letter-spacing: .16em; text-transform: uppercase; font-size: 11px; }
 .techstack h2 {
-  font-size: 80px;
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  top: 120px;
-  left: 0;
-  font-weight: 400;
+  font-size: 70px;
+  line-height: 70px;
+  margin: 0;
+  font-weight: 500;
   text-transform: uppercase;
+  letter-spacing: -0.06em;
+  color: #eae5ec;
 }
+.techstack h2 span { color: var(--accentColor); }
+.tech-lab { position: relative; padding: 1px 18px 28px; border: 1px solid rgba(194,164,255,.28); border-radius: 24px; background: linear-gradient(140deg, rgba(38,29,48,.82), rgba(12,9,16,.88)); box-shadow: 0 25px 80px rgba(0,0,0,.36), inset 0 1px rgba(255,255,255,.05); transform: perspective(1400px) rotateY(-5deg) rotateX(2deg); }
+.lab-topbar { height: 40px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid rgba(234,229,236,.1); }.lab-light { width: 7px; height: 7px; border-radius: 50%; background: rgba(194,164,255,.6); }.lab-topbar p { margin: 0 0 0 auto; color: rgba(234,229,236,.38); font-size: 9px; letter-spacing: .15em; }.tech-shelf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 22px 0 12px; }
+.tech-tile { min-height: 135px; position: relative; overflow: hidden; padding: 13px; display: flex; flex-direction: column; border: 1px solid rgba(194,164,255,.16); border-radius: 15px; background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.018)); box-shadow: inset 0 1px rgba(255,255,255,.06), 0 7px 15px rgba(0,0,0,.12); transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease; outline: none; }.tech-tile::after { content: ""; position: absolute; width: 120px; height: 120px; top: -85px; left: -55px; background: rgba(194,164,255,.18); filter: blur(25px); opacity: 0; transition: opacity .28s ease; }.tech-tile:hover, .tech-tile:focus { z-index: 2; transform: translateY(-13px) scale(1.035); border-color: rgba(194,164,255,.82); box-shadow: 0 18px 30px rgba(0,0,0,.28), 0 0 25px rgba(194,164,255,.25), inset 0 1px rgba(255,255,255,.14); }.tech-tile:hover::after, .tech-tile:focus::after { opacity: 1; }.tile-category { color: var(--accentColor); font-size: 8px; letter-spacing: .13em; text-transform: uppercase; }.tile-icon { height: 40px; margin-top: 7px; display: flex; align-items: center; }.tile-icon img { max-width: 34px; max-height: 34px; object-fit: contain; }.tile-icon span { color: #e8dcff; font-weight: 700; font-size: 15px; }.tech-tile h3 { margin: auto 0 0; position: relative; z-index: 1; color: #f0ebf1; font-size: 13px; font-weight: 500; }.tech-tile > p { max-height: 0; position: relative; z-index: 1; margin: 0; overflow: hidden; color: #c6b9d2; font-size: 10px; line-height: 1.35; opacity: 0; transition: max-height .25s ease, opacity .2s ease, margin .25s ease; }.tech-tile:hover > p, .tech-tile:focus > p { max-height: 30px; margin-top: 5px; opacity: 1; }.tile-arrow { position: absolute; right: 12px; bottom: 11px; color: var(--accentColor); opacity: 0; transition: .2s ease; }.tech-tile:hover .tile-arrow, .tech-tile:focus .tile-arrow { opacity: 1; }.lab-base { position: absolute; left: 4%; right: 4%; bottom: 8px; height: 7px; border-radius: 50%; background: rgba(194,164,255,.3); filter: blur(12px); }
+.tech-shelf { gap: 14px; }.tech-tile { min-height: 155px; padding: 15px; }.tile-icon { width: 64px; height: 64px; margin-top: 8px; display: grid; place-items: center; }.tile-icon svg { width: 54px; height: 54px; }.tile-icon span { font-size: 18px; }.tech-tile h3 { font-size: 14px; }.powerbi-icon { height: 50px; width: 54px; display: flex; align-items: end; justify-content: center; gap: 5px; }.powerbi-icon i { width: 12px; background: #f2c811; border-radius: 2px 2px 0 0; }.powerbi-icon i:nth-child(1) { height: 22px; }.powerbi-icon i:nth-child(2) { height: 38px; }.powerbi-icon i:nth-child(3) { height: 50px; }.matplotlib-icon { width: 54px; height: 50px; position: relative; border-left: 3px solid #42c49a; border-bottom: 3px solid #42c49a; }.matplotlib-icon i { position: absolute; width: 34px; height: 3px; transform-origin: left; }.matplotlib-icon i:nth-child(1) { top: 35px; left: 3px; rotate: -30deg; background: #ff7b54; }.matplotlib-icon i:nth-child(2) { top: 23px; left: 13px; rotate: 38deg; background: #5ea8ff; }.matplotlib-icon i:nth-child(3) { top: 27px; left: 33px; rotate: -42deg; background: #d56cdb; }.dax-icon { color: #f2c811 !important; font-family: Georgia, serif; font-size: 46px !important; font-style: italic; letter-spacing: -0.12em; }
+.tile-icon .multicolor-logo { width: 54px; height: 54px; object-fit: contain; image-rendering: auto; }
 
 @media screen and (min-width: 768px) {
   body {
@@ -122,7 +129,5 @@ body {
   }
 }
 @media screen and (max-width: 900px) {
-  .techstack h2 {
-    font-size: 40px;
-  }
+  .techstack { min-height: auto; padding: 80px 0; }.tech-lab-layout { min-height: auto; grid-template-columns: 1fr; gap: 35px; }.techstack-copy { text-align: center; }.techstack h2 { font-size: 48px; line-height: 1; }.tech-lab { transform: none; }.tech-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }.tech-tile { min-height: 120px; }.lab-topbar p { font-size: 7px; }
 }

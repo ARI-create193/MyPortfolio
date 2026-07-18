@@ -1,300 +1,73 @@
-import * as THREE from "three";
-import { useRef, useMemo, useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Html, Line } from "@react-three/drei";
-import { EffectComposer, N8AO } from "@react-three/postprocessing";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  Physics,
-  RigidBody,
-  RapierRigidBody,
-  BallCollider,
-  CuboidCollider,
-} from "@react-three/rapier";
+import type { IconType } from "react-icons";
+import { FaJava } from "react-icons/fa";
+import { SiGradio, SiMysql, SiNumpy, SiPython, SiScikitlearn, SiSnowflake } from "react-icons/si";
 
-const textureLoader = new THREE.TextureLoader();
-const techItems = [
-  { name: "Python", url: "/images/python.png" },
-  { name: "C++", url: "/images/cpp.png" },
-  { name: "Java", url: "/images/java.png" },
-  { name: "MySQL", url: "/images/mysql.png" },
-  { name: "NumPy", url: "/images/numpy.png" },
-  { name: "Pandas", url: "/images/pandas.png" },
-  { name: "Matplotlib", url: "/images/matplotlib.png" },
-  { name: "Gradio", url: "/images/gradio.png" },
-  { name: "Machine Learning", url: "/images/ml.png" },
-  { name: "Power BI", url: "/images/powerbi.png" },
-  { name: "Tableau", url: "/images/tableau.png" },
-  { name: "Snowflake", url: "/images/snowflake.png" },
-  { name: "Framer", url: "/images/framer.png" },
-  { name: "Figma", url: "/images/figma.png" },
-  { name: "Claude", url: "/images/claude.png" },
-] as const;
 
-const textures = techItems.map((t) => textureLoader.load(t.url));
-
-textures.forEach((t) => {
-  t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = 8;
-});
-
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-
-const CUBE_SCALE_BASE = 1.55;
-const POSITION_SPREAD = 34;
-const POSITION_Y_OFFSET = 32;
-const POSITION_Z_OFFSET = 16;
-
-const makeCubes = () =>
-  techItems.map((_t, techIndex) => ({
-    // exactly one cube per tech item
-    techIndex,
-    scale: CUBE_SCALE_BASE * [0.95, 1, 1.05][techIndex % 3],
-    calloutSide: (["x", "-x", "z", "-z"] as const)[techIndex % 4],
-  }));
-
-type CubeProps = {
-  vec?: THREE.Vector3;
-  scale: number;
-  r?: typeof THREE.MathUtils.randFloatSpread;
-  material: THREE.Material | THREE.Material[];
-  isActive: boolean;
-  label: string;
-  calloutSide: "x" | "-x" | "z" | "-z";
+type Tech = {
+  name: string;
+  icon?: IconType;
+  image?: string;
+  color?: string;
+  mark?: string;
+  iconType?: "matplotlib" | "powerbi" | "dax";
+  category: string;
+  detail: string;
 };
 
-function CubeGeo({
-  vec = new THREE.Vector3(),
-  scale,
-  r = THREE.MathUtils.randFloatSpread,
-  material,
-  isActive,
-  label,
-  calloutSide,
-}: CubeProps) {
-  const api = useRef<RapierRigidBody | null>(null);
+const techItems: Tech[] = [
+  { name: "Python", icon: SiPython, color: "#3776ab", category: "Core", detail: "Analysis & automation" },
+  { name: "Java", icon: FaJava, color: "#e76f00", category: "Core", detail: "Core programming" },
+  { name: "SQL", icon: SiMysql, color: "#4479a1", category: "Core", detail: "Databases & queries" },
+  { name: "NumPy", icon: SiNumpy, color: "#4dabcf", category: "Analyze", detail: "Numerical computing" },
+  { name: "Pandas", image: "/images/pandas.png", category: "Analyze", detail: "Data wrangling" },
+  { name: "Matplotlib", iconType: "matplotlib", category: "Analyze", detail: "Data storytelling" },
+  { name: "DAX Query", iconType: "dax", category: "Analyze", detail: "Power BI calculations" },
+  { name: "Scikit-learn", icon: SiScikitlearn, color: "#f7931e", category: "Build", detail: "Predictive models" },
+  { name: "Gradio", icon: SiGradio, color: "#f97316", category: "Build", detail: "Interactive ML apps" },
+  { name: "Power BI", iconType: "powerbi", category: "Visualize", detail: "Business intelligence" },
+  { name: "Tableau", image: "/images/tableau.png", category: "Visualize", detail: "Visual analytics" },
+  { name: "Snowflake", icon: SiSnowflake, color: "#29b5e8", category: "Visualize", detail: "Cloud data platform" },
+];
 
-  useFrame((_state, delta) => {
-    if (!isActive) return;
-    delta = Math.min(0.1, delta);
-    const impulse = vec
-      .copy(api.current!.translation())
-      .normalize()
-      .multiply(
-        new THREE.Vector3(
-          -50 * delta * scale,
-          -150 * delta * scale,
-          -50 * delta * scale
-        )
-      );
-
-    api.current?.applyImpulse(impulse, true);
-  });
-
-  const calloutOffset = useMemo(() => {
-    const base = 1.35 * scale;
-    const up = 1.0 * scale;
-    switch (calloutSide) {
-      case "x":
-        return new THREE.Vector3(base, up, 0);
-      case "-x":
-        return new THREE.Vector3(-base, up, 0);
-      case "z":
-        return new THREE.Vector3(0, up, base);
-      case "-z":
-        return new THREE.Vector3(0, up, -base);
-    }
-  }, [calloutSide, scale]);
-
-  return (
-    <RigidBody
-      linearDamping={0.75}
-      angularDamping={0.15}
-      friction={0.2}
-      position={[
-        r(POSITION_SPREAD),
-        r(POSITION_SPREAD) - POSITION_Y_OFFSET,
-        r(POSITION_SPREAD) - POSITION_Z_OFFSET,
-      ]}
-      ref={api}
-      colliders={false}
-    >
-      <CuboidCollider args={[0.5 * scale, 0.5 * scale, 0.5 * scale]} />
-      <mesh
-        castShadow
-        receiveShadow
-        scale={scale}
-        geometry={cubeGeometry}
-        material={material}
-        rotation={[0.35, 0.75, 0.25]}
-      />
-
-      {/* Callout line + always-readable label */}
-      <Line
-        points={[
-          [0, 0, 0],
-          [calloutOffset.x, calloutOffset.y, calloutOffset.z],
-        ]}
-        color="#c2a4ff"
-        lineWidth={1}
-        transparent
-        opacity={0.65}
-      />
-      <Html
-        position={[calloutOffset.x, calloutOffset.y, calloutOffset.z]}
-        sprite
-        transform={false}
-        center
-        distanceFactor={10}
-        style={{
-          pointerEvents: "none",
-          fontFamily: "Geist, sans-serif",
-          fontSize: "12px",
-          letterSpacing: "0.06em",
-          textTransform: "uppercase",
-          color: "#eae5ec",
-          background: "rgba(11, 8, 12, 0.6)",
-          border: "1px solid rgba(194, 164, 255, 0.45)",
-          padding: "6px 10px",
-          borderRadius: "999px",
-          backdropFilter: "blur(6px)",
-          WebkitBackdropFilter: "blur(6px)",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {label}
-      </Html>
-    </RigidBody>
-  );
-}
-
-type PointerProps = {
-  vec?: THREE.Vector3;
-  isActive: boolean;
+const TechIcon = ({ tech }: { tech: Tech }) => {
+  if (tech.image) return <img className="multicolor-logo" src={tech.image} alt="" />;
+  if (tech.icon) {
+    const Icon = tech.icon;
+    return <Icon color={tech.color} aria-hidden="true" />;
+  }
+  if (tech.iconType === "powerbi") return <span className="powerbi-icon" aria-hidden="true"><i></i><i></i><i></i></span>;
+  if (tech.iconType === "matplotlib") return <span className="matplotlib-icon" aria-hidden="true"><i></i><i></i><i></i></span>;
+  if (tech.iconType === "dax") return <span className="dax-icon" aria-hidden="true">ƒx</span>;
+  return <span>{tech.mark}</span>;
 };
 
-function Pointer({ vec = new THREE.Vector3(), isActive }: PointerProps) {
-  const ref = useRef<RapierRigidBody>(null);
+const TechStack = () => (
+  <section className="techstack" aria-labelledby="techstack-title">
+    <div className="tech-lab-layout">
+      <header className="techstack-copy">
+        <p>Explore my</p>
+        <h2 id="techstack-title">My <span>Toolkit</span></h2>
+      </header>
 
-  useFrame(({ pointer, viewport }) => {
-    if (!isActive) return;
-    const targetVec = vec.lerp(
-      new THREE.Vector3(
-        (pointer.x * viewport.width) / 2,
-        (pointer.y * viewport.height) / 2,
-        0
-      ),
-      0.2
-    );
-    ref.current?.setNextKinematicTranslation(targetVec);
-  });
-
-  return (
-    <RigidBody
-      position={[100, 100, 100]}
-      type="kinematicPosition"
-      colliders={false}
-      ref={ref}
-    >
-      <BallCollider args={[2]} />
-    </RigidBody>
-  );
-}
-
-const TechStack = () => {
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const threshold = document
-        .getElementById("work")!
-        .getBoundingClientRect().top;
-      setIsActive(scrollY > threshold);
-    };
-    document.querySelectorAll(".header a").forEach((elem) => {
-      const element = elem as HTMLAnchorElement;
-      element.addEventListener("click", () => {
-        const interval = setInterval(() => {
-          handleScroll();
-        }, 10);
-        setTimeout(() => {
-          clearInterval(interval);
-        }, 1000);
-      });
-    });
-    window.addEventListener("scroll", handleScroll);
-    
-    // Refresh ScrollTrigger because Suspense lazy loading affects DOM heights
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const materials = useMemo(() => {
-    return textures.map((texture) => {
-      const m = new THREE.MeshStandardMaterial({
-        map: texture,
-        emissive: new THREE.Color("#ffffff"),
-        emissiveMap: texture,
-        emissiveIntensity: 0.35,
-        metalness: 0.15,
-        roughness: 0.85,
-      });
-      // Same logo on all faces for readability.
-      return [m, m, m, m, m, m];
-    });
-  }, []);
-
-  const cubes = useMemo(() => makeCubes(), []);
-
-  return (
-    <div className="techstack">
-      <h2> My Techstack</h2>
-
-      <Canvas
-        shadows
-        gl={{ alpha: true, stencil: false, depth: false, antialias: false }}
-        camera={{ position: [0, 0, 20], fov: 32.5, near: 1, far: 100 }}
-        onCreated={(state) => (state.gl.toneMappingExposure = 1.5)}
-        className="tech-canvas"
-      >
-        <ambientLight intensity={1} />
-        <spotLight
-          position={[20, 20, 25]}
-          penumbra={1}
-          angle={0.2}
-          color="white"
-          castShadow
-          shadow-mapSize={[512, 512]}
-        />
-        <directionalLight position={[0, 5, -4]} intensity={2} />
-        <Physics gravity={[0, 0, 0]}>
-          <Pointer isActive={isActive} />
-          {cubes.map((props, i) => (
-            <CubeGeo
-              key={i}
-              {...props}
-              material={materials[props.techIndex]}
-              isActive={isActive}
-              label={techItems[props.techIndex].name}
-            />
+      <div className="tech-lab" aria-label="Technology toolkit">
+        <div className="lab-topbar"><span className="lab-light"></span><span className="lab-light"></span><span className="lab-light"></span><p>TECH LAB / DATA &amp; AI</p></div>
+        <div className="tech-shelf">
+          {techItems.map((tech) => (
+            <article className="tech-tile" key={tech.name} tabIndex={0} aria-label={`${tech.name}: ${tech.detail}`}>
+              <span className="tile-category">{tech.category}</span>
+              <div className="tile-icon">
+                <TechIcon tech={tech} />
+              </div>
+              <h3>{tech.name}</h3>
+              <p>{tech.detail}</p>
+              <span className="tile-arrow" aria-hidden="true">↗</span>
+            </article>
           ))}
-        </Physics>
-        <Environment
-          files="/models/char_enviorment.hdr"
-          environmentIntensity={0.5}
-          environmentRotation={[0, 4, 2]}
-        />
-        <EffectComposer enableNormalPass={false}>
-          <N8AO color="#0f002c" aoRadius={2} intensity={1.15} />
-        </EffectComposer>
-      </Canvas>
+        </div>
+        <div className="lab-base"></div>
+      </div>
     </div>
-  );
-};
+  </section>
+);
 
 export default TechStack;
