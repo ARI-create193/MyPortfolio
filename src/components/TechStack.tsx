@@ -1,5 +1,4 @@
 import type { IconType } from "react-icons";
-import { FaJava } from "react-icons/fa";
 import { SiGradio, SiMysql, SiNumpy, SiSnowflake } from "react-icons/si";
 
 
@@ -16,7 +15,7 @@ type Tech = {
 
 const techItems: Tech[] = [
   { name: "Python", image: "/images/python.png", category: "Core", detail: "Analysis & automation" },
-  { name: "Java", icon: FaJava, color: "#e76f00", category: "Core", detail: "Core programming" },
+  { name: "Java", image: "/images/java.svg", category: "Core", detail: "Core programming" },
   { name: "SQL", icon: SiMysql, color: "#4479a1", category: "Core", detail: "Databases & queries" },
   { name: "NumPy", icon: SiNumpy, color: "#4dabcf", category: "Analyze", detail: "Numerical computing" },
   { name: "Pandas", image: "/images/pandas.png", category: "Analyze", detail: "Data wrangling" },
@@ -30,7 +29,10 @@ const techItems: Tech[] = [
 ];
 
 const TechIcon = ({ tech }: { tech: Tech }) => {
-  if (tech.image) return <img className="multicolor-logo" src={tech.image} alt="" />;
+  if (tech.image) {
+    const isScikit = tech.name === "Scikit-learn";
+    return <img className={`multicolor-logo${isScikit ? " scikit-logo" : ""}`} src={tech.image} alt="" />;
+  }
   if (tech.icon) {
     const Icon = tech.icon;
     return <Icon color={tech.color} aria-hidden="true" />;
