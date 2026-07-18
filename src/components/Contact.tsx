@@ -1,4 +1,4 @@
-import { MdArrowOutward, MdCopyright } from "react-icons/md";
+import { MdCopyright } from "react-icons/md";
 import { useState } from "react";
 import "./styles/Contact.css";
 
@@ -66,33 +66,6 @@ const Contact = () => {
                 +91 8446548140
               </a>
             </p>
-          </div>
-          <div className="contact-box">
-            <h4>Social</h4>
-            <a
-              href="https://github.com/ARI-create193"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Github <MdArrowOutward />
-            </a>
-            <a
-              href="https://linkedin.com/in/aryan-omprakash-kaminwar"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Linkedin <MdArrowOutward />
-            </a>
-            <a
-              href="https://www.instagram.com/iykyk_aarryyaan/"
-              target="_blank"
-              data-cursor="disable"
-              className="contact-social"
-            >
-              Instagram <MdArrowOutward />
-            </a>
           </div>
           <div className="contact-box">
             <h2>
