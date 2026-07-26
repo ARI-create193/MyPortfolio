@@ -12,13 +12,19 @@ const Contact = () => {
     const target = event.target as HTMLFormElement;
     const formData = new FormData(target);
     
-    // Add Web3Forms access key
-    formData.append("access_key", import.meta.env.VITE_WEB3FORMS_ACCESS_KEY);
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message")
+    };
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        body: formData
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -29,7 +35,7 @@ const Contact = () => {
         setTimeout(() => setResult("Send Message"), 5000);
       } else {
         console.error("Error", data);
-        setResult(data.message || "Failed to send");
+        setResult(data.error || "Failed to send");
         setTimeout(() => setResult("Send Message"), 5000);
       }
     } catch (error) {
@@ -45,7 +51,6 @@ const Contact = () => {
         <h3>Contact</h3>
         <div className="contact-form-section">
           <form onSubmit={onSubmit} className="contact-form-horizontal">
-            <input type="hidden" name="subject" value="New Submission from Portfolio Website" />
             <input type="text" name="name" placeholder="Your Name" required data-cursor="disable"/>
             <input type="email" name="email" placeholder="Your Email" required data-cursor="disable"/>
             <input type="text" name="message" placeholder="Your Message" required data-cursor="disable"/>
